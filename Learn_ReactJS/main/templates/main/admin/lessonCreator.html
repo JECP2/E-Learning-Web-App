@@ -30,8 +30,8 @@
         <ul class="collapsible">
             <li>
                 <div class="collapsible-header valign-wrapper">
-                    <p class="col s9">Unit {{unit}}</p>
-                    <button class="btn-small col s2 waves-effect waves-light actionBtn actionBtn" onclick="location.href='{% url 'main:create-lesson' unit %}'">Add</button>
+                    <p class="col s8">Unit {{unit}}</p>
+                    <button class="btn-small col s4 waves-effect waves-light actionBtn actionBtn" onclick="location.href='{% url 'main:create-lesson' unit %}'">Add</button>
                 </div>
                 <div class="collapsible-body">
                     <ul>
@@ -49,7 +49,6 @@
             </li>
         </ul>
         {%endfor%}
-        
     </div>
     <div class="col s10">   
         <form action="{%url 'main:create-lesson' currUnit%}" method="POST">
@@ -72,11 +71,14 @@
                         Write your lesson here!
                     </textarea><br>
                 </div>
+                <div class="col center s1">
+                    <button class="btn-large center-align" type="submit">Create</button>
+                    {% comment %} <button class="btn-large center-align red">Cancel</button> {% endcomment %}
+                </div> 
+                <div class="col center s10">
+                    <button class="btn-large center-align" type="submit">Create</button>
+                </div> 
             </div>
-            <div class="row center">
-                <button class="btn-large center-align" type="submit">Create</button>
-                {% comment %} <button class="btn-large center-align red">Cancel</button> {% endcomment %}
-            </div> 
         </form>
     </div>
 <script>
@@ -100,6 +102,7 @@
         });
         $('.collapsible').collapsible();
         $('select').formSelect()
+        {%if units%}
         {% for lesson in lessons %}
             {% if lesson.unitNo == currUnit %}
             $('#lessonNo').val({{lesson.lessonNo}}+1)
@@ -107,6 +110,9 @@
             $('#lessonNo').val(1)
             {% endif %}
         {% endfor %}
+        {%else%}
+        $('#lessonNo').val(1)
+        {%endif%}
     });
     $('#newUnit').on("click", function(){
         location.href="{% url 'main:create-lesson' 0 %}".replace('0', {{units|last}}+1)

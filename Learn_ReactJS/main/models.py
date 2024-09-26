@@ -37,7 +37,7 @@ class Student(models.Model):
 class Learn1(models.Model):
     id = models.IntegerField('ID','id',primary_key=True)
     unitNo = models.IntegerField('Unit No','unitNo',default=0)
-    lessonNo = models.IntegerField('Lesson No.','lessonNo',default=0)
+    lessonNo = models.IntegerField('Lesson No.','lessonNo',default=1)
     title = models.CharField(max_length=200)
     content = models.TextField(default="The content of the lesson should go here.")
     published = models.DateTimeField("date published", default=datetime.now())
@@ -72,8 +72,9 @@ class Lesson(models.Model):
 class Assessment(models.Model):
     #id
     #fk lesson_id, which lesson it belongs
-    title = models.CharField(max_length=255)
-    lesson = models.ForeignKey(Learn1, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, default="No Exam Title")
+    # lesson = models.ForeignKey(Learn1, on_delete=models.CASCADE)
+    lesson = models.CharField(max_length=255, default="Lesson")
     # questions and answers
     # unit scope? 
     # pass
@@ -84,20 +85,20 @@ class Quiz(models.Model):
     #id
     #fk lesson_id, which lesson it belongs
     # questions and answers
-    title = models.CharField(max_length=255)
-    lesson = models.ForeignKey(Learn1, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, default="No Quiz Title")
+    # lesson = models.ForeignKey(Learn1, on_delete=models.CASCADE)
+    lesson = models.CharField(max_length=255, default="Lesson")
     def __str__(self):
         return self.title
     # pass
-
 class Quiz_Question(models.Model):
-    def choicesTemp():
-        defaultvar = {'A':'','B':'','C':'','D':''}
-        return defaultvar
-    
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question_text = models.TextField()
-    choices = models.JSONField(default=choicesTemp)
+    optionA = models.CharField(max_length=255,default='A')
+    optionB = models.CharField(max_length=255,default='B')
+    optionC = models.CharField(max_length=255,default='C')
+    optionD = models.CharField(max_length=255,default='D')
+
     correct_choice = models.CharField(max_length=1)
     def __str__(self):
         return f"{self.question_text}"
@@ -105,7 +106,11 @@ class Quiz_Question(models.Model):
 class Assessment_Question(models.Model):
     exam = models.ForeignKey(Assessment, on_delete=models.CASCADE)
     question_text = models.TextField()
-    choices = models.JSONField()
+    optionA = models.CharField(max_length=255,default='A')
+    optionB = models.CharField(max_length=255,default='B')
+    optionC = models.CharField(max_length=255,default='C')
+    optionD = models.CharField(max_length=255,default='D')
+    
     correct_choice = models.CharField(max_length=1)
     def __str__(self):
         return f"{self.quiz.title} - Question {self.pk}: {self.question_text}"
@@ -116,3 +121,8 @@ class Badge(models.Model):
     requirements = models.TextField()
     def __str__(self) -> str:
         return self.name
+    
+class UserBadge(models.Model):
+    user = models.ForeignKey(Student, on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    earned_at = models.DateTimeField(auto_now_add=True)

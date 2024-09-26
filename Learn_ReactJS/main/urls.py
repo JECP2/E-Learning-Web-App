@@ -4,7 +4,8 @@ from . import views
 app_name = "main"
 
 urlpatterns = [
-    path('',views.login, name="index"),
+    path('',views.index, name="index"),
+    path('login/',views.login, name="login"),
     path('logout/',views.logout, name="logout"),
     path('dashboard/',views.dashboard, name="dashboard"),
 
@@ -22,7 +23,6 @@ urlpatterns = [
     path('a/students/<int:pk>/edit/',views.astudentedit, name="students_edit"),
     path('a/students/<int:pk>/delete/',views.astudentdelete, name="students_delete"),
     path('a/lesson/',views.funcLessonList, name="lesson"),
-    path('a/assessments/',views.aAssessments, name="assessments"),
     path('a/achievements/',views.aAchievements, name="achievements"),
     path('a/reports/',views.aReports, name="reports"),
     path('a/logs/',views.aLogs, name="logs"),
@@ -36,8 +36,17 @@ urlpatterns = [
     path('a/lesson/<int:id>/delete/',views.deleteLesson, name="delete-lesson"),
     path('a/unit/<int:unit>/delete/',views.deleteUnit, name="delete-unit"),
 
+    path('a/assessments/',views.aAssessments, name="assessments"),
+    path('a/assessments/<str:type>/create/',views.assessmentCreate, name="create-assessment"),
+    path('a/assessments/<str:type>/<int:id>/edit/',views.assessmentEdit, name="edit-assessment"),
+    path('a/assessments/<int:id>/delete',views.assessmentDelete, name="delete-assessment"),
+    path('a/assessments/submit/',views.assessmentCreate, name="add-quiz"),
+
+    path('a/assessments/<str:type>/<int:id>/take/',views.studentTakeQuiz, name='take-assessment'),
+    path('a/assessments/<str:type>/<int:id>/result/',views.result, name='score')
 
 
+    
 
     # path('u/',views.use)
     # path('admin_add_student/',views.admin_add_student, name="admin_add_student"),
